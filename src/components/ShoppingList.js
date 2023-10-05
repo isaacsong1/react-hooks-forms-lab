@@ -3,36 +3,25 @@ import ItemForm from "./ItemForm";
 import Filter from "./Filter";
 import Item from "./Item";
 
-function ShoppingList({ items }) {
+function ShoppingList({ items, onItemFormSubmit }) {
   const [selectedCategory, setSelectedCategory] = useState("All");
-  const [searchedItem, setSearchedItem] = useState('');
+  const [search, setSearchedItem] = useState('');
 
   function handleCategoryChange(event) {
     setSelectedCategory(event.target.value);
   }
 
-  function handleSearchChange(event) {
-    setSearchedItem(event.target.value);
-  }
+  const itemsToDisplay = items
+    .filter((item) => selectedCategory === "All" || item.category === selectedCategory)
+    .filter((item) => item.name.toLowerCase().includes(search.toLowerCase()));
 
-  const dropdownItemsToDisplay = items.filter((item) => {
-    if (selectedCategory === "All") return true;
-
-    return item.category === selectedCategory;
-  });
-
-  // const searchedItemsToDisplay = items.filter((item) => {
-  //   if (!searchedItem.trim()) {
-  //     return item
-  //   }
-  // });
 
   return (
     <div className="ShoppingList">
-      <ItemForm />
-      <Filter searchedItem={searchedItem} onCategoryChange={handleCategoryChange} onSearchedChange={handleSearchChange} />
+      <ItemForm onItemFormSubmit={onItemFormSubmit} />
+      <Filter search={search} onCategoryChange={handleCategoryChange} onSearchChange={setSearchedItem} />
       <ul className="Items">
-        {dropdownItemsToDisplay.map((item) => (
+        {itemsToDisplay.map((item) => (
           <Item key={item.id} name={item.name} category={item.category} />
         ))}
       </ul>

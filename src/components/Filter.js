@@ -1,7 +1,11 @@
-function Filter({ onCategoryChange, searchedItem, onSearchedChange }) {
+function Filter({ onCategoryChange, search, onSearchChange }) {
+  function handleSearchChange(event) {
+    onSearchChange(event.target.value);
+  }
+
   return (
     <div className="Filter">
-      <input type="text" name="search" placeholder="Search..." onChange={onSearchedChange} value={searchedItem}/>
+      <input type="text" name="search" placeholder="Search..." onChange={handleSearchChange} value={search}/>
       <select name="filter" onChange={onCategoryChange}>
         <option value="All">Filter by category</option>
         <option value="Produce">Produce</option>
